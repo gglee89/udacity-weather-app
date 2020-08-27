@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {};
+projectData = [];
 
 // Require Express to run server and routes
 const express = require('express');
@@ -23,20 +23,25 @@ app.use(express.static('website'));
 
 // Endpoints
 app.get('/data', (req, res) => {
-    console.log('projectData', projectData);
-    res.send(projectData);
+    return res.send(projectData);
 });
 
 app.post('/data', (req, res) => {
-    const newData = req.body;
-    console.log('newData', newData);
-    const { temperature, data, userResponse } = newData;
+    const data = req.body;
 
-    projectData['temperature'] = temperature;
-    projectData['data'] = data;
-    projectData['userResponse'] = userResponse;
-
-    res.send(projectData);
+    try {
+        projectData.push(data);
+        return res.send({
+            success: true,
+            message: "success",
+        });
+    } catch (error) {
+        return res.send({
+            success: false,
+            message: "Error while trying to process request.",
+            error: error
+        });
+    }
 });
 
 // Setup Server
