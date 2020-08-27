@@ -21,6 +21,24 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('website'));
 
+// Endpoints
+app.get('/data', (req, res) => {
+    console.log('projectData', projectData);
+    res.send(projectData);
+});
+
+app.post('/data', (req, res) => {
+    const newData = req.body;
+    console.log('newData', newData);
+    const { temperature, data, userResponse } = newData;
+
+    projectData['temperature'] = temperature;
+    projectData['data'] = data;
+    projectData['userResponse'] = userResponse;
+
+    res.send(projectData);
+});
+
 // Setup Server
 app.listen(PORT, () => {
     console.log(`Localhost server started at port ${PORT}`);
